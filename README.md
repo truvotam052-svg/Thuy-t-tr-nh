@@ -45,6 +45,7 @@ Các chiến thuật AI
 Aggressive: cược mạnh
 Defensive: chơi an toàn
 Smart AI: quyết định thông minh hơn
+
 Ý nghĩa project
 
 Project giúp luyện:
@@ -61,3 +62,6 @@ chia bài tự động
 hệ thống cược
 AI người chơi
 xác định người thắng theo luật Poker.
+
+
+https://canva.link/i3m7cgsv6c74wob 
