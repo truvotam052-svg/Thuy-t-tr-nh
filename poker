@@ -1,0 +1,186 @@
+if (three)
+            return "Three of a Kind";
+
+        if (pairCount >= 2)
+            return "Two Pair";
+
+        if (pairCount == 1)
+            return "Pair";
+
+        return "High Card";
+    }
+};
+
+class Game {
+private:
+
+    Deck deck;
+
+    vector<Player> players;
+
+    vector<Card> communityCards;
+
+    int pot;
+
+    int currentBet;
+
+public:
+
+    Game() {
+
+        pot = 0;
+
+        currentBet = 50;
+    }
+
+    void setupPlayers() {
+
+        int n;
+
+        int startingChips;
+
+        cout << "Nhap so nguoi choi: ";
+        cin >> n;
+
+        cout << "Nhap so chip ban dau: ";
+        cin >> startingChips;
+
+        for (int i = 1; i <= n; i++) {
+
+            int choice;
+
+            cout << "\nPlayer "
+                 << i
+                 << " strategy:\n";
+
+            cout << "1. Aggressive\n";
+            cout << "2. Defensive\n";
+            cout << "3. Smart AI\n";
+
+            cout << "Choose: ";
+
+            cin >> choice;
+
+            string strategy;
+
+            if (choice == 1)
+                strategy = "Aggressive";
+
+            else if (choice == 2)
+                strategy = "Defensive";
+
+            else
+                strategy = "Smart";
+
+            players.push_back(
+
+                Player(
+                    "Player " +
+                    to_string(i),
+
+                    startingChips,
+
+                    strategy
+                )
+            );
+        }
+    }
+
+    void start() {
+
+        pot = 0;
+
+        currentBet = 50;
+
+        communityCards.clear();
+
+        deck.reset();
+
+        deck.shuffleDeck();
+
+        for (auto &p : players) {
+
+            p.clearHand();
+        }
+
+        dealHoleCards();
+
+        cout << "\n===== PLAYER HANDS =====\n";
+
+        for (auto &p : players) {
+
+            p.showHand();
+        }
+
+        bettingRound();
+
+        flop();
+
+        bettingRound();
+
+        turn();
+
+        bettingRound();
+
+        river();
+
+        bettingRound();
+
+        determineWinner();
+    }
+
+    void bettingRound() {
+
+        cout << "\n===== BETTING ROUND =====\n";
+
+        cout << "Current Bet: "
+             << currentBet
+             << endl;
+
+        for (auto &p : players) {
+
+            int before =
+                p.getChips();
+
+            int actionBet =
+                p.makeDecision(currentBet);
+
+            if (actionBet > currentBet) {
+
+                currentBet = actionBet;
+            }
+
+            int after =
+                p.getChips();
+
+            pot += (before - after);
+        }
+
+        cout << "\nTOTAL POT: "
+             << pot
+             << " chips\n";
+    }
+
+    void dealHoleCards() {
+
+        for (int i = 0; i < 2; i++) {
+
+            for (auto &p : players) {
+
+                p.receiveCard(
+                    deck.dealCard()
+                );
+            }
+        }
+    }
+
+    void flop() {
+
+        cout << "\n===== FLOP =====\n";
+
+        for (int i = 0; i < 3; i++) {
+
+            Card c =
+                deck.dealCard();
+
+            communityCards.push_back(c);
